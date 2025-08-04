@@ -1,0 +1,37 @@
+{
+  "name": "use-case-generator",
+  "version": "1.0.0",
+  "description": "A full-stack web application for generating business use cases from digital wallet transaction data",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "client": "cd client && npm start",
+    "build": "cd client && npm run build",
+    "install-client": "cd client && npm install",
+    "setup": "node setup.js",
+    "heroku-postbuild": "npm run install-client && npm run build"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.2.1",
+    "cors": "^2.8.5",
+    "csv-parser": "^3.0.0",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^3.0.1",
+    "multer": "^1.4.5-lts.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": [
+    "digital-wallet",
+    "use-cases",
+    "data-analytics",
+    "nepal",
+    "gemini"
+  ],
+  "author": "Use Case Generator",
+  "license": "MIT"
+}

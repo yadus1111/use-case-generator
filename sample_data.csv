@@ -1,0 +1,11 @@
+user_id,transaction_id,amount,location,timestamp,merchant_type
+U001,TXN001,1500.00,Kathmandu,2024-01-15 10:30:00,Restaurant
+U002,TXN002,2500.00,Pokhara,2024-01-15 11:15:00,Transport
+U003,TXN003,800.00,Lalitpur,2024-01-15 12:00:00,Grocery
+U004,TXN004,3500.00,Bhaktapur,2024-01-15 13:45:00,Shopping
+U005,TXN005,1200.00,Kathmandu,2024-01-15 14:20:00,Restaurant
+U001,TXN006,1800.00,Pokhara,2024-01-15 15:10:00,Transport
+U002,TXN007,950.00,Lalitpur,2024-01-15 16:30:00,Grocery
+U003,TXN008,4200.00,Bhaktapur,2024-01-15 17:15:00,Shopping
+U004,TXN009,1100.00,Kathmandu,2024-01-15 18:00:00,Restaurant
+U005,TXN010,2800.00,Pokhara,2024-01-15 19:30:00,Transport 
