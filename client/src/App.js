@@ -1,15 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import MermaidDiagram from './MermaidDiagram';
 import { 
   Upload, 
   FileText, 
   Download, 
-  Trash2, 
-  Eye, 
-  EyeOff, 
-  ChevronRight, 
-  ChevronLeft,
   TrendingUp,
   Users,
   Shield,
@@ -23,18 +18,8 @@ import {
   RefreshCw,
   ChevronUp,
   ChevronDown,
-  User,
-  Settings,
-  GitBranch,
   CheckCircle,
-  Play,
-  Wrench,
-  Database,
-  BarChart,
   AlertTriangle,
-  Calendar,
-  Activity,
-  FileText as FileTextIcon,
   Info,
   DollarSign
 } from 'lucide-react';
@@ -170,34 +155,8 @@ function App() {
     }
   };
 
-  const getIconComponent = (iconName) => {
-    const iconMap = {
-      'chart-line': TrendingUp,
-      'users': Users,
-      'shield': Shield,
-      'map-pin': MapPin,
-      'clock': Clock,
-      'trending-up': TrendingUp,
-      'target': Target,
-      'zap': Zap,
-      'pie-chart': PieChart,
-      'bar-chart': BarChart3,
-      'lightbulb': Lightbulb
-    };
-    return iconMap[iconName] || Lightbulb;
-  };
-
   const toggleUseCaseExpansion = (index) => {
     setExpandedUseCase(expandedUseCase === index ? null : index);
-  };
-
-  const getPriorityColor = (priority) => {
-    switch (priority?.toLowerCase()) {
-      case 'high': return '#dc3545';
-      case 'medium': return '#ffc107';
-      case 'low': return '#28a745';
-      default: return '#6c757d';
-    }
   };
 
   const downloadUseCases = () => {
@@ -349,17 +308,7 @@ function App() {
     }
   };
 
-  // Function to render use case diagram in UI
-  const renderUseCaseDiagram = (useCase) => {
-    if (!useCase.mermaidDiagram) return null;
-    
-    return (
-      <MermaidDiagram 
-        mermaidCode={useCase.mermaidDiagram} 
-        title={`${useCase.title} - Use Case Diagram`}
-      />
-    );
-  };
+
 
 
 
