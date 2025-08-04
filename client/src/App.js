@@ -93,7 +93,7 @@ function App() {
     try {
       console.log('Uploading file:', file.name, 'Size:', file.size);
       
-      const response = await axios.post('/api/upload', formData, {
+      const response = await axios.post('/api/upload.js', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
