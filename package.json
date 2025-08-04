@@ -10,7 +10,8 @@
     "build": "cd client && npm run build",
     "install-client": "cd client && npm install",
     "setup": "node setup.js",
-    "heroku-postbuild": "npm run install-client && npm run build"
+    "heroku-postbuild": "npm run install-client && npm run build",
+    "vercel-build": "npm run install-client && npm run build"
   },
   "dependencies": {
     "@google/generative-ai": "^0.2.1",

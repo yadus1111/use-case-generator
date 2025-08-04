@@ -1,6 +1,8 @@
 # Dependencies
 node_modules/
-client/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # Environment variables
 .env
@@ -12,11 +14,6 @@ client/node_modules/
 # Build outputs
 client/build/
 client/dist/
-
-# Logs
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 
 # Runtime data
 pids
@@ -48,15 +45,43 @@ jspm_packages/
 # dotenv environment variables file
 .env
 
-# Vercel
-.vercel
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
 
-# IDE
+# next.js build output
+.next
+
+# nuxt.js build output
+.nuxt
+
+# vuepress build output
+.vuepress/dist
+
+# Serverless directories
+.serverless
+
+# FuseBox cache
+.fusebox/
+
+# DynamoDB Local files
+.dynamodb/
+
+# TernJS port file
+.tern-port
+
+# IDE files
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
 
-# OS
+# OS generated files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db 

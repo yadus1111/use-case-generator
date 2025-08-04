@@ -25,9 +25,12 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// Only serve static files in production
+// Serve static files from client/build in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, 'client/build')));
+} else {
+  // In development, serve from client/public
+  app.use(express.static(path.join(__dirname, 'client/public')));
 }
 
 // Configure multer for file uploads
@@ -268,13 +271,12 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-// For Vercel deployment
-if (process.env.NODE_ENV === 'production') {
-  // Export for Vercel serverless
-  module.exports = app;
-} else {
-  // Local development
+// For Vercel serverless deployment
+if (process.env.NODE_ENV !== 'production') {
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
 }
+
+// Export for Vercel
+module.exports = app; 

@@ -164,54 +164,6 @@ npm run build
 
 MIT License - feel free to use and modify as needed.
 
-## Deployment
-
-### Deploy to Vercel (Recommended)
-
-This application is configured for easy deployment to Vercel. Follow these steps:
-
-1. **Prepare your repository**:
-   - Ensure all files are committed to a Git repository
-   - Make sure you have the required configuration files (`vercel.json`, etc.)
-
-2. **Deploy using Vercel CLI**:
-   ```bash
-   # Install Vercel CLI
-   npm install -g vercel
-   
-   # Login to Vercel
-   vercel login
-   
-   # Deploy
-   vercel --prod
-   ```
-
-3. **Or use the provided deployment scripts**:
-   ```bash
-   # For Unix/Linux/Mac
-   chmod +x deploy.sh
-   ./deploy.sh
-   
-   # For Windows
-   deploy.bat
-   ```
-
-4. **Set environment variables**:
-   - In your Vercel dashboard, go to Settings → Environment Variables
-   - Add `GEMINI_API_KEY` with your actual API key
-   - Set environment to "Production"
-
-5. **Access your deployed app**:
-   - Your app will be available at `https://your-project-name.vercel.app`
-
-For detailed deployment instructions, see [DEPLOYMENT.md](./DEPLOYMENT.md).
-
-### Alternative Deployment Options
-
-- **Heroku**: Use the existing `heroku-postbuild` script in package.json
-- **Railway**: Similar to Heroku deployment
-- **DigitalOcean App Platform**: Configure as a Node.js app
-
 ## Contributing
 
 1. Fork the repository
