@@ -11,7 +11,7 @@
     "install-client": "cd client && npm install",
     "setup": "node setup.js",
     "heroku-postbuild": "npm run install-client && npm run build",
-    "vercel-build": "npm run install-client && npm run build"
+    "vercel-build": "echo 'No build required - using pre-built React app'"
   },
   "dependencies": {
     "@google/generative-ai": "^0.2.1",
