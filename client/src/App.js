@@ -11,8 +11,6 @@ import {
   MapPin,
   Clock,
   Target,
-  Zap,
-  PieChart,
   BarChart3,
   Lightbulb,
   RefreshCw,
