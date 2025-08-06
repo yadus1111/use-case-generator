@@ -415,8 +415,16 @@ export default async function handler(req, res) {
   try {
     console.log('Starting file upload processing...');
     
-    // Parse multipart form data
-    const form = formidable();
+    // Parse multipart form data with proper configuration
+    const form = formidable({
+      maxFileSize: 10 * 1024 * 1024, // 10MB limit
+      keepExtensions: true,
+      uploadDir: '/tmp', // Use temp directory for Vercel
+      filename: (name, ext, part, form) => {
+        return `${Date.now()}-${part.originalFilename || 'file'}`;
+      }
+    });
+    
     const [fields, files] = await new Promise((resolve, reject) => {
       form.parse(req, (err, fields, files) => {
         if (err) {
@@ -439,9 +447,28 @@ export default async function handler(req, res) {
     }
 
     console.log('CSV file found:', csvFile.originalname, 'Size:', csvFile.size);
+    console.log('CSV file details:', {
+      filepath: csvFile.filepath,
+      mimetype: csvFile.mimetype,
+      size: csvFile.size
+    });
 
-    // Read file buffer
-    const buffer = fs.readFileSync(csvFile.filepath);
+    // Read file buffer with proper error handling
+    let buffer;
+    try {
+      if (csvFile.filepath) {
+        buffer = fs.readFileSync(csvFile.filepath);
+      } else if (csvFile.buffer) {
+        buffer = csvFile.buffer;
+      } else {
+        throw new Error('No file path or buffer found');
+      }
+    } catch (fileError) {
+      console.error('File reading error:', fileError);
+      return res.status(400).json({ 
+        error: 'Failed to read uploaded file. Please try again.' 
+      });
+    }
 
     // Extract business context
     const businessProblem = fields.businessProblem || '';
