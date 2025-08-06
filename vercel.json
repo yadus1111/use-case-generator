@@ -3,12 +3,17 @@
   "functions": {
     "api/upload.js": {
       "maxDuration": 30
+    },
+    "api/test.js": {
+      "maxDuration": 10
     }
   },
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" },
-    { "source": "/(.*)", "destination": "/client/$1" }
+    { "source": "/(.*)", "destination": "/index.html" }
   ],
+  "buildCommand": "npm run vercel-build",
+  "outputDirectory": "client/build",
   "env": {
     "GEMINI_API_KEY": "@gemini_api_key"
   }

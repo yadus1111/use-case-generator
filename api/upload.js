@@ -391,25 +391,53 @@ export const config = {
 };
 
 export default async function handler(req, res) {
+  console.log('API route called:', req.method, req.url);
+  
+  // Enable CORS
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  // Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    console.log('Handling OPTIONS request');
+    res.status(200).end();
+    return;
+  }
+
   if (req.method !== 'POST') {
+    console.log('Method not allowed:', req.method);
     res.status(405).json({ error: 'Method Not Allowed' });
     return;
   }
 
   try {
+    console.log('Starting file upload processing...');
+    
     // Parse multipart form data
     const form = formidable();
     const [fields, files] = await new Promise((resolve, reject) => {
       form.parse(req, (err, fields, files) => {
-        if (err) reject(err);
-        else resolve([fields, files]);
+        if (err) {
+          console.error('Formidable parse error:', err);
+          reject(err);
+        } else {
+          console.log('Form data parsed successfully');
+          resolve([fields, files]);
+        }
       });
     });
 
+    console.log('Fields received:', Object.keys(fields));
+    console.log('Files received:', Object.keys(files));
+
     const csvFile = files.csvFile;
     if (!csvFile) {
+      console.log('No CSV file found in request');
       return res.status(400).json({ error: 'Please upload a CSV file' });
     }
+
+    console.log('CSV file found:', csvFile.originalname, 'Size:', csvFile.size);
 
     // Read file buffer
     const fs = require('fs');
@@ -419,19 +447,34 @@ export default async function handler(req, res) {
     const businessProblem = fields.businessProblem || '';
     const businessScenario = fields.businessScenario || '';
 
+    console.log('Business Problem:', businessProblem);
+    console.log('Business Scenario:', businessScenario);
+
     // Parse CSV data
+    console.log('Parsing CSV data...');
     const csvData = await parseCSVBuffer(buffer);
     
     if (csvData.length === 0) {
+      console.log('CSV file is empty or invalid');
       return res.status(400).json({ error: 'CSV file is empty or invalid' });
     }
 
+    console.log('CSV parsed successfully, rows:', csvData.length);
+
     // Generate comprehensive analysis
+    console.log('Generating CSV analysis...');
     const csvSummary = generateCSVSummary(csvData);
     const dataPatterns = analyzeDataPatterns(csvData);
     
+    console.log('CSV analysis generated, length:', csvSummary.length);
+    console.log('Data patterns identified:', Object.keys(dataPatterns).filter(key => key !== 'insights').length);
+    console.log('Key insights:', dataPatterns.insights);
+    
     // Generate use cases with business context and pattern analysis
+    console.log('Starting use case generation...');
     const useCases = await generateUseCases(csvSummary, businessProblem, businessScenario, dataPatterns);
+
+    console.log('Use cases generated successfully, count:', useCases.length);
 
     res.json({
       success: true,
@@ -443,6 +486,7 @@ export default async function handler(req, res) {
 
   } catch (error) {
     console.error('Upload error:', error);
+    console.error('Error stack:', error.stack);
     
     if (error.message.includes('API key')) {
       res.status(401).json({ 
