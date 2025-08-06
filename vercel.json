@@ -21,5 +21,6 @@
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
-  "buildCommand": "npm run vercel-build"
+  "buildCommand": "npm run vercel-build",
+  "outputDirectory": "client/build"
 } 
