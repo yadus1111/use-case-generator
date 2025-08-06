@@ -438,30 +438,28 @@ export default async function handler(req, res) {
     });
 
     console.log('Fields received:', Object.keys(fields));
-    console.log('Files received:', Object.keys(files));
+    // Log the full files object for debugging
+    console.log('Files object:', files);
 
-    const csvFile = files.csvFile;
-    if (!csvFile) {
-      console.log('No CSV file found in request');
-      return res.status(400).json({ error: 'Please upload a CSV file' });
+    // Try to find the first file in the files object
+    const fileKeys = Object.keys(files);
+    if (fileKeys.length === 0) {
+      console.log('No files found in request');
+      return res.status(400).json({ error: 'No files found in request' });
     }
+    const csvFile = files[fileKeys[0]]; // get the first file, regardless of key
 
-    console.log('CSV file found:', csvFile.originalname, 'Size:', csvFile.size);
-    console.log('CSV file details:', {
-      filepath: csvFile.filepath,
-      mimetype: csvFile.mimetype,
-      size: csvFile.size
-    });
+    console.log('CSV file details:', csvFile);
 
     // Read file buffer with proper error handling
     let buffer;
     try {
-      if (csvFile.filepath) {
-        buffer = fs.readFileSync(csvFile.filepath);
-      } else if (csvFile.buffer) {
+      if (csvFile.buffer) {
         buffer = csvFile.buffer;
+      } else if (csvFile.filepath) {
+        buffer = fs.readFileSync(csvFile.filepath);
       } else {
-        throw new Error('No file path or buffer found');
+        throw new Error('No file buffer or path found');
       }
     } catch (fileError) {
       console.error('File reading error:', fileError);
