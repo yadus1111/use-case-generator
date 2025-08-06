@@ -450,6 +450,7 @@ export default async function handler(req, res) {
     const csvFile = files[fileKeys[0]]; // get the first file, regardless of key
 
     console.log('CSV file details:', csvFile);
+    console.log('Full CSV file object:', JSON.stringify(csvFile, null, 2));
 
     // Read file buffer with proper error handling
     let buffer;
