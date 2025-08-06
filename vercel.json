@@ -1,7 +1,15 @@
 {
   "version": 2,
+  "functions": {
+    "api/upload.js": {
+      "maxDuration": 30
+    }
+  },
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/(.*)", "destination": "/client/$1" }
-  ]
+  ],
+  "env": {
+    "GEMINI_API_KEY": "@gemini_api_key"
+  }
 } 
