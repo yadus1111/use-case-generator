@@ -1,6 +1,7 @@
-const formidable = require('formidable');
-const csv = require('csv-parser');
-const { Readable } = require('stream');
+import formidable from 'formidable';
+import csv from 'csv-parser';
+import { Readable } from 'stream';
+import fs from 'fs';
 
 // Helper: Parse CSV from buffer
 const parseCSVBuffer = (buffer) => {
@@ -440,7 +441,6 @@ export default async function handler(req, res) {
     console.log('CSV file found:', csvFile.originalname, 'Size:', csvFile.size);
 
     // Read file buffer
-    const fs = require('fs');
     const buffer = fs.readFileSync(csvFile.filepath);
 
     // Extract business context
