@@ -318,16 +318,16 @@ const generateCSVSummary = (data) => {
 const generateUseCases = async (csvSummary, businessProblem = '', businessScenario = '', dataPatterns = {}) => {
   try {
     console.log('Starting use case generation...');
-    
+  
     // Environment variables check
-    console.log('Environment variables check:');
-    console.log('GEMINI_API_KEY exists:', !!process.env.GEMINI_API_KEY);
-    console.log('GEMINI_API_KEY value:', process.env.GEMINI_API_KEY ? 'SET' : 'NOT SET');
-    
-    if (!process.env.GEMINI_API_KEY) {
-      throw new Error('GEMINI_API_KEY is not set in environment variables');
-    }
-
+  console.log('Environment variables check:');
+  console.log('GEMINI_API_KEY exists:', !!process.env.GEMINI_API_KEY);
+  console.log('GEMINI_API_KEY value:', process.env.GEMINI_API_KEY ? 'SET' : 'NOT SET');
+  
+  if (!process.env.GEMINI_API_KEY) {
+    throw new Error('GEMINI_API_KEY is not set in environment variables');
+  }
+  
     let contextInfo = '';
     if (businessProblem || businessScenario) {
       contextInfo = '\n\nBusiness Context:\n';
@@ -421,12 +421,12 @@ Focus on use cases that:
         // Try to parse as direct JSON first
         useCases = JSON.parse(responseText);
       } catch (parseError) {
-        console.log('Failed to parse JSON, trying to extract JSON from response');
+      console.log('Failed to parse JSON, trying to extract JSON from response');
         console.log('Parse error:', parseError.message, 'Response preview:', responseText.substring(0, 100));
-        
+      
         // Try to extract JSON from markdown code blocks
         const jsonMatch = responseText.match(/```json\s*([\s\S]*?)\s*```/);
-        if (jsonMatch) {
+      if (jsonMatch) {
           try {
             useCases = JSON.parse(jsonMatch[1]);
           } catch (extractError) {
@@ -436,8 +436,8 @@ Focus on use cases that:
           // Try to find JSON array in the response
           const arrayMatch = responseText.match(/\[\s*\{[\s\S]*\}\s*\]/);
           if (arrayMatch) {
-            try {
-              console.log('Found JSON array in response, attempting to parse');
+        try {
+          console.log('Found JSON array in response, attempting to parse');
               useCases = JSON.parse(arrayMatch[0]);
             } catch (arrayError) {
               console.log('Failed to parse array match:', arrayError.message);
@@ -539,9 +539,9 @@ if (process.env.NODE_ENV === 'production') {
 
 // For Vercel serverless deployment
 if (process.env.NODE_ENV !== 'production') {
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+}); 
 }
 
 // Export for Vercel

@@ -230,7 +230,7 @@ function App() {
     URL.revokeObjectURL(url);
   };
 
-    const downloadUseCasePDF = async (useCase, index) => {
+  const downloadUseCasePDF = async (useCase, index) => {
     console.log('Starting PDF download for use case:', index, useCase.title);
     console.log('Use case object:', useCase);
     
@@ -287,7 +287,7 @@ function App() {
           <p style="color: #6c757d; margin: 5px 0 0 0; font-size: 14px;">${new Date().toLocaleString()}</p>
         </div>
       `;
-      
+
       tempContainer.appendChild(header);
       tempContainer.appendChild(clonedContent);
       document.body.appendChild(tempContainer);
@@ -311,7 +311,7 @@ function App() {
       
       // Remove the temporary container
       document.body.removeChild(tempContainer);
-      
+
       // Create PDF with proper page breaks
       const pdf = new jsPDF('p', 'mm', 'a4');
       const imgWidth = 210; // A4 width in mm
@@ -319,11 +319,11 @@ function App() {
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
       let heightLeft = imgHeight;
       let position = 0;
-      
+
       // Add the image to PDF
       pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
       heightLeft -= pageHeight;
-      
+
       // Add additional pages if content is too long
       while (heightLeft >= 0) {
         position = heightLeft - imgHeight;
@@ -331,7 +331,7 @@ function App() {
         pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
         heightLeft -= pageHeight;
       }
-      
+
       // Save the PDF
       const fileName = `${useCase.title.replace(/[^a-zA-Z0-9]/g, '_')}_UseCase_Report.pdf`;
       pdf.save(fileName);
@@ -352,7 +352,7 @@ function App() {
   // Function to render use case diagram in UI
   const renderUseCaseDiagram = (useCase) => {
     if (!useCase.mermaidDiagram) return null;
-    
+
     return (
       <MermaidDiagram 
         mermaidCode={useCase.mermaidDiagram} 
@@ -541,13 +541,13 @@ function App() {
                         <span className={`priority-badge ${useCase.priority?.toLowerCase()}`}>
                           {useCase.priority}
                         </span>
-                      </div>
+                     </div>
                       <div className="header-actions">
-                        <button 
-                          onClick={() => toggleUseCaseExpansion(index)}
-                          className="expand-btn"
-                        >
-                          {expandedUseCase === index ? <ChevronUp /> : <ChevronDown />}
+                                           <button 
+                       onClick={() => toggleUseCaseExpansion(index)}
+                       className="expand-btn"
+                     >
+                        {expandedUseCase === index ? <ChevronUp /> : <ChevronDown />}
                           {expandedUseCase === index ? 'Collapse' : 'Expand'}
                         </button>
                         <button 
@@ -566,7 +566,7 @@ function App() {
                               Download PDF Report
                             </>
                           )}
-                        </button>
+                      </button>
                       </div>
                     </div>
                   </div>
@@ -574,29 +574,29 @@ function App() {
                   {/* Summary Section */}
                   <div className="use-case-summary">
                     <div className="summary-grid">
-                      <div className="summary-item">
-                        <Target className="icon" />
+                    <div className="summary-item">
+                      <Target className="icon" />
                         <div className="summary-content">
                           <span className="summary-label">Priority</span>
                           <span className="summary-value">{useCase.priority}</span>
                         </div>
-                      </div>
-                      <div className="summary-item">
-                        <Users className="icon" />
+                    </div>
+                    <div className="summary-item">
+                      <Users className="icon" />
                         <div className="summary-content">
                           <span className="summary-label">Type</span>
                           <span className="summary-value">Business Use Case</span>
                         </div>
-                      </div>
-                      <div className="summary-item">
-                        <Clock className="icon" />
+                    </div>
+                    <div className="summary-item">
+                      <Clock className="icon" />
                         <div className="summary-content">
                           <span className="summary-label">Status</span>
                           <span className="summary-value">Generated</span>
                         </div>
-                      </div>
-                      <div className="summary-item">
-                        <BarChart3 className="icon" />
+                    </div>
+                    <div className="summary-item">
+                      <BarChart3 className="icon" />
                         <div className="summary-content">
                           <span className="summary-label">Impact</span>
                           <span className="summary-value">High</span>
@@ -625,43 +625,43 @@ function App() {
                         <h4> Detailed Requirements</h4>
                         <div className="requirements-grid">
                           <div className="requirement-item">
-                            <CheckCircle className="icon" />
+                              <CheckCircle className="icon" />
                             <div className="requirement-content">
                               <span className="requirement-label">Title</span>
                               <span className="requirement-value">{useCase.title}</span>
                             </div>
-                          </div>
+                        </div>
                           <div className="requirement-item">
                             <CheckCircle className="icon" />
                             <div className="requirement-content">
                               <span className="requirement-label">Description</span>
                               <span className="requirement-value">{useCase.description}</span>
+                      </div>
                             </div>
-                          </div>
                           <div className="requirement-item">
                             <CheckCircle className="icon" />
                             <div className="requirement-content">
                               <span className="requirement-label">Business Impact</span>
                               <span className="requirement-value">{useCase.businessImpact}</span>
-                            </div>
-                          </div>
+                        </div>
+                      </div>
                           <div className="requirement-item">
                             <CheckCircle className="icon" />
                             <div className="requirement-content">
                               <span className="requirement-label">Priority</span>
                               <span className="requirement-value">{useCase.priority}</span>
-                            </div>
-                          </div>
                         </div>
                       </div>
-
+                            </div>
+                          </div>
+                          
                       {/* Use Case Diagram */}
                       {useCase.mermaidDiagram && (
                         <div className="detail-section">
                           <h4> Use Case Diagram</h4>
                           <MermaidDiagram mermaidCode={useCase.mermaidDiagram} title={`${useCase.title} - Use Case Diagram`} />
-                        </div>
-                      )}
+                                    </div>
+                                  )}
 
                       {/* Implementation Summary */}
                       <div className="detail-section">
@@ -670,11 +670,11 @@ function App() {
                           <div className="implementation-item">
                             <Target className="icon" />
                             <span>This use case focuses on leveraging digital wallet transaction data to create business value for the Nepali market.</span>
-                          </div>
+                              </div>
                           <div className="implementation-item">
                             <Target className="icon" />
                             <span>The implementation should consider local market conditions, regulatory requirements, and user behavior patterns specific to Nepal.</span>
-                          </div>
+                            </div>
                           <div className="implementation-item">
                             <Target className="icon" />
                             <span>Success will be measured by increased user engagement, transaction volume, and merchant partnerships.</span>
