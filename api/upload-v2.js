@@ -1,7 +1,5 @@
-import formidable from 'formidable';
 import csv from 'csv-parser';
 import { Readable } from 'stream';
-import fs from 'fs';
 
 // Helper: Parse CSV from buffer
 const parseCSVBuffer = (buffer) => {
@@ -415,111 +413,82 @@ export default async function handler(req, res) {
   try {
     console.log('Starting file upload processing...');
     
-    // Parse multipart form data with Vercel-compatible configuration
-    const form = formidable({
-      maxFileSize: 10 * 1024 * 1024, // 10MB limit
-      keepExtensions: true,
-      // Vercel-specific configuration
-      allowEmptyFiles: false,
-      filter: (part) => {
-        // Only allow CSV files
-        return part.mimetype && part.mimetype.includes('csv');
-      }
-    });
-    
-    const [fields, files] = await new Promise((resolve, reject) => {
-      form.parse(req, (err, fields, files) => {
-        if (err) {
-          console.error('Formidable parse error:', err);
-          reject(err);
-        } else {
-          console.log('Form data parsed successfully');
-          resolve([fields, files]);
-        }
-      });
-    });
-
-    console.log('Fields received:', Object.keys(fields));
-    console.log('Files object:', files);
-
-    // Try to find the first file in the files object
-    const fileKeys = Object.keys(files);
-    if (fileKeys.length === 0) {
-      console.log('No files found in request');
-      return res.status(400).json({ error: 'No files found in request' });
+    // Get the raw body data
+    const chunks = [];
+    for await (const chunk of req) {
+      chunks.push(chunk);
     }
+    const buffer = Buffer.concat(chunks);
     
-    const csvFile = files[fileKeys[0]]; // get the first file, regardless of key
-    console.log('CSV file details:', csvFile);
-
-    // Handle both single file and array of files
-    let targetFile = Array.isArray(csvFile) ? csvFile[0] : csvFile;
-    
-    if (!targetFile) {
-      console.log('No valid file found');
-      return res.status(400).json({ error: 'No valid file found' });
-    }
-
-    console.log('Target file:', targetFile);
-
-    // Read file buffer with proper error handling for Vercel
-    let buffer;
-    try {
-      if (targetFile.buffer) {
-        // File is already in memory (common in Vercel)
-        buffer = targetFile.buffer;
-        console.log('Using file buffer, size:', buffer.length);
-      } else if (targetFile.filepath) {
-        // File was saved to disk (less common in Vercel)
-        buffer = fs.readFileSync(targetFile.filepath);
-        console.log('Read file from disk, size:', buffer.length);
-        // Clean up temp file
-        try {
-          fs.unlinkSync(targetFile.filepath);
-        } catch (unlinkError) {
-          console.log('Could not delete temp file:', unlinkError.message);
-        }
-      } else if (targetFile.data) {
-        // Alternative buffer property
-        buffer = targetFile.data;
-        console.log('Using file data, size:', buffer.length);
-      } else {
-        throw new Error('No file buffer, path, or data found');
-      }
-    } catch (fileError) {
-      console.error('File reading error:', fileError);
-      return res.status(400).json({ 
-        error: 'Failed to read uploaded file. Please try again.' 
-      });
-    }
-
     if (!buffer || buffer.length === 0) {
-      console.log('Empty file buffer');
-      return res.status(400).json({ error: 'File is empty' });
+      console.log('Empty request body');
+      return res.status(400).json({ error: 'No file data received' });
     }
 
-    // Extract business context
-    const businessProblem = fields.businessProblem || '';
-    const businessScenario = fields.businessScenario || '';
+    console.log('Received buffer size:', buffer.length);
 
+    // Parse multipart form data manually for Vercel compatibility
+    const boundary = req.headers['content-type']?.split('boundary=')[1];
+    if (!boundary) {
+      return res.status(400).json({ error: 'Invalid content type - multipart form data required' });
+    }
+
+    // Simple multipart parser for CSV files
+    const parts = buffer.toString('binary').split('--' + boundary);
+    let csvData = null;
+    let businessProblem = '';
+    let businessScenario = '';
+
+    for (const part of parts) {
+      if (part.includes('Content-Disposition: form-data')) {
+        if (part.includes('name="csvFile"')) {
+          // Extract CSV content
+          const contentStart = part.indexOf('\r\n\r\n') + 4;
+          const contentEnd = part.lastIndexOf('\r\n');
+          if (contentStart < contentEnd) {
+            const content = part.substring(contentStart, contentEnd);
+            csvData = Buffer.from(content, 'binary');
+          }
+        } else if (part.includes('name="businessProblem"')) {
+          const contentStart = part.indexOf('\r\n\r\n') + 4;
+          const contentEnd = part.lastIndexOf('\r\n');
+          if (contentStart < contentEnd) {
+            businessProblem = part.substring(contentStart, contentEnd);
+          }
+        } else if (part.includes('name="businessScenario"')) {
+          const contentStart = part.indexOf('\r\n\r\n') + 4;
+          const contentEnd = part.lastIndexOf('\r\n');
+          if (contentStart < contentEnd) {
+            businessScenario = part.substring(contentStart, contentEnd);
+          }
+        }
+      }
+    }
+
+    if (!csvData) {
+      console.log('No CSV file found in request');
+      return res.status(400).json({ error: 'No CSV file found in request' });
+    }
+
+    console.log('CSV data extracted, size:', csvData.length);
     console.log('Business Problem:', businessProblem);
     console.log('Business Scenario:', businessScenario);
 
     // Parse CSV data
     console.log('Parsing CSV data...');
-    const csvData = await parseCSVBuffer(buffer);
+    const parsedData = await parseCSVBuffer(csvData);
     
-    if (csvData.length === 0) {
+    if (parsedData.length === 0) {
       console.log('CSV file is empty or invalid');
       return res.status(400).json({ error: 'CSV file is empty or invalid' });
     }
 
-    console.log('CSV parsed successfully, rows:', csvData.length);
+    console.log('CSV parsed successfully, rows:', parsedData.length);
 
     // Generate comprehensive analysis
     console.log('Generating CSV analysis...');
-    const csvSummary = generateCSVSummary(csvData);
-    const dataPatterns = analyzeDataPatterns(csvData);
+    const csvSummary = generateCSVSummary(parsedData);
+    const dataPatterns = analyzeDataPatterns(parsedData);
     
     console.log('CSV analysis generated, length:', csvSummary.length);
     console.log('Data patterns identified:', Object.keys(dataPatterns).filter(key => key !== 'insights').length);
@@ -533,7 +502,7 @@ export default async function handler(req, res) {
 
     res.json({
       success: true,
-      data: csvData,
+      data: parsedData,
       summary: csvSummary,
       patterns: dataPatterns,
       useCases: useCases

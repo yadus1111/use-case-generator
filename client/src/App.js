@@ -110,16 +110,33 @@ function App() {
     try {
       console.log('Uploading file:', file.name, 'Size:', file.size);
       
-      const response = await axios.post('/api/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        timeout: 60000, // 60 second timeout
-        onUploadProgress: (progressEvent) => {
-          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-          console.log('Upload progress:', percentCompleted + '%');
-        }
-      });
+      // Try the new upload endpoint first, fallback to original if needed
+      let response;
+      try {
+        response = await axios.post('/api/upload-v2', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+          timeout: 60000, // 60 second timeout
+          onUploadProgress: (progressEvent) => {
+            const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+            console.log('Upload progress:', percentCompleted + '%');
+          }
+        });
+      } catch (error) {
+        console.log('Upload-v2 failed, trying original endpoint:', error.message);
+        // Fallback to original endpoint
+        response = await axios.post('/api/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+          timeout: 60000, // 60 second timeout
+          onUploadProgress: (progressEvent) => {
+            const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+            console.log('Upload progress:', percentCompleted + '%');
+          }
+        });
+      }
 
       console.log('Upload response received:', response.status);
       
