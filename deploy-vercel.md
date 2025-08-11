@@ -46,17 +46,6 @@ In your Vercel dashboard, ensure these are set:
 
 ## What to Expect
 
-### Before the Fix
-- ❌ File uploads fail with "Failed to read uploaded file" error
-- ❌ 400 status codes on upload attempts
-- ❌ Formidable parsing errors in logs
-
-### After the Fix
-- ✅ File uploads work with the new endpoint
-- ✅ Fallback to original endpoint if needed
-- ✅ Better error messages and debugging
-- ✅ Improved Vercel compatibility
-
 ## Testing Your Frontend
 
 1. **Open your deployed app** at your Vercel URL

@@ -1,6 +1,33 @@
+
 # Use Case Generator
 
+[🌐 **Live Demo**](https://client-indol-two-74.vercel.app/)
+
+
+
 A full-stack web application for generating business use cases from digital wallet transaction data using AI.
+## 🛠️ How It Works (Workflow)
+
+1. **User uploads a CSV file** with transaction data through the web interface.
+2. **User describes the business problem and scenario** in simple text fields.
+3. **Backend (Node.js/Express)** receives the CSV, parses it, and analyzes the data for patterns.
+4. **AI (Google Gemini API)** is called to generate business use cases based on the uploaded data and user input.
+5. **Frontend (React)** displays the generated use cases and visualizes them with diagrams (using Mermaid.js).
+6. **User can export** the results as PDF or text files for sharing.
+
+---
+
+## 📁 Main Files Explained (Simple Overview)
+
+- `server.js` – The main backend server. Handles file uploads, talks to the AI, processes CSV data, and serves the frontend.
+- `client/src/App.js` – The main React app. Handles user input, file upload, shows results, and manages the UI flow.
+- `client/src/MermaidDiagram.js` – Renders the use case diagrams using Mermaid.js.
+- `setup.js` – Script to help set up your `.env` file for API keys and configuration.
+- `sample_data.csv` – Example CSV file to test the app.
+- `vercel.json` – Configuration for Vercel deployment.
+- `deploy-vercel.md` – Step-by-step guide for deploying to Vercel.
+
+---
 
 ## Features
 
@@ -56,7 +83,8 @@ A full-stack web application for generating business use cases from digital wall
    npm run client     # Frontend only (port 3000)
    ```
 
-The application will be available at `http://localhost:5000`
+
+The application will be available at `http://localhost:5000` (or use the [Live Demo](https://client-indol-two-74.vercel.app/))
 
 ## Usage
 
