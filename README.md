@@ -5,7 +5,7 @@
 
 
 
-A full-stack web application for generating business use cases from digital wallet transaction data using AI.
+A full-stack web application for generating business use cases from financial transaction data using AI.
 ## 🛠️ How It Works (Workflow)
 
 1. **User uploads a CSV file** with transaction data through the web interface.
