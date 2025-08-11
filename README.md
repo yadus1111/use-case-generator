@@ -107,17 +107,6 @@ The application will be available at `http://localhost:5000` (or use the [Live D
 - Export all use cases as text file
 - Share results with stakeholders
 
-## Data Format
-
-Your CSV file should contain transaction data with these columns:
-
-```csv
-user_id,transaction_id,amount,location,timestamp,merchant_type
-U001,TXN001,1500.00,Kathmandu,2024-01-15 10:30:00,Restaurant
-U002,TXN002,2500.00,Pokhara,2024-01-15 11:15:00,Transport
-U003,TXN003,800.00,Lalitpur,2024-01-15 12:00:00,Grocery
-```
-
 ## Technology Stack
 
 ### Backend
@@ -197,5 +186,3 @@ For issues and questions:
 - Contact the development team
 
 ---
-
-**Note**: This application is designed for local development and use. All processing is done locally with no persistent storage of uploaded files. 
